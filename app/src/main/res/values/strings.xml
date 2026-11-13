@@ -25,6 +25,7 @@
     <string name="hint_description_form_task_fragment">Informe sua nova tarefa</string>
     <string name="text_status_form_task_fragment">Status</string>
     <string name="text_button_save_form_task_fragment">Salvar</string>
+    <string name="student_name">Cristina costa teixeira</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

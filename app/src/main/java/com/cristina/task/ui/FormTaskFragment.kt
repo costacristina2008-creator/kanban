@@ -1,60 +1,61 @@
 package com.cristina.task.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.cristina.task.R
+import com.cristina.task.data.model.Status
+import com.cristina.task.databinding.FragmentFormTaskBinding
+import com.cristina.task.util.initToolbar
+import com.cristina.task.util.showBottomSheet
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FormTaskFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FormTaskFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentFormTaskBinding? = null
+    private val binding get() = _binding!!
+    private var status: Status = Status.TODO
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_form_task, container, false)
+    ): View {
+        _binding = FragmentFormTaskBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FormTaskFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FormTaskFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initToolbar(binding.toolbar)
+        initListener()
+    }
+
+    private fun initListener() {
+        binding.buttonSave.setOnClickListener {
+            validateData()
+        }
+
+        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            status = when (checkedId) {
+                R.id.radioButtonTodo -> Status.TODO
+                R.id.radioButtonDoing -> Status.DOING
+                else -> Status.DONE
             }
+        }
+    }
+
+    private fun validateData() {
+        val description = binding.editTextDescricao.text.toString().trim()
+
+        if (description.isNotBlank()) {
+        } else {
+            showBottomSheet(message = getString(R.string.description_empty_form_task_fragment))
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

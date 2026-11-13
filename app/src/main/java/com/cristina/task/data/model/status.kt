@@ -1,4 +1,4 @@
-package com.marta.task.data.model
+package com.cristina.task.data.model
 
 enum class Status {
     TODO,

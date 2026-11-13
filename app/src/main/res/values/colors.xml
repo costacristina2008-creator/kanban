@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_default">#0277BD</color>
+    <color name="color_default">#BFA2DB</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="color_delete">#FF4C38</color>
-    <color name="color_details">#540501</color>
+    <color name="color_delete">#5A4A6A</color>
+    <color name="color_details">#5A4A6A</color>
+    <color name="color_doing">#C9B6E4</color>
+    <color name="color_done">#A7C7C5</color>
+    <color name="color_dark_purple">#5A4A6A</color>
 </resources>

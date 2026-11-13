@@ -1,60 +1,74 @@
 package com.cristina.task.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cristina.task.R
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.cristina.task.data.model.Status
+import com.cristina.task.data.model.Task
+import com.cristina.task.databinding.FragmentDoneBinding
+import com.cristina.task.ui.adapter.TaskAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DoneFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DoneFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentDoneBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_done, container, false)
+    ): View {
+        _binding = FragmentDoneBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DoneFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DoneFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecyclerView()
+        getTasks()
+    }
+
+    private fun initRecyclerView() {
+        taskAdapter = TaskAdapter(requireContext()) { task, option ->
+            optionSelected(task, option)
+        }
+
+        with(binding.recyclerViewTask) {
+            setHasFixedSize(true)
+            adapter = taskAdapter
+        }
+    }
+
+    private fun optionSelected(task: Task, option: Int) {
+        when (option) {
+            TaskAdapter.SELECT_BACK -> {
+                Toast.makeText(requireContext(), "Voltar", Toast.LENGTH_SHORT).show()
             }
+            TaskAdapter.SELECT_REMOVE -> {
+                Toast.makeText(requireContext(), "Remover", Toast.LENGTH_SHORT).show()
+            }
+            TaskAdapter.SELECT_EDIT -> {
+                Toast.makeText(requireContext(), "Editar", Toast.LENGTH_SHORT).show()
+            }
+            TaskAdapter.SELECT_DETAILS -> {
+                Toast.makeText(requireContext(), "Detalhes", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun getTasks() {
+        val taskList = listOf(
+            Task("6", "Criação do projeto no Android Studio", Status.DONE),
+            Task("7", "Configuração das cores e temas", Status.DONE)
+        )
+        taskAdapter.submitList(taskList)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
